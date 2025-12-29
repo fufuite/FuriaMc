@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fúria MC | Servidor de Minecraft 2026</title>
+    <style>
+        /* CONFIGURAÇÕES GERAIS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary: #8a2be2;
+            --primary-dark: #4b0082;
+            --accent: #bf00ff;
+            --bg-dark: #0a0a0a;
+            --bg-card: #151515;
+            --text-light: #f4f4f4;
+            --gold: #ffd700;
+            --success: #00ff7f;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* BARRA DE NAVEGAÇÃO */
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 2px solid var(--primary);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* SEÇÃO HOME / BANNER */
+        #home {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1627398242454-45a1465c2479?q=80&w=1974&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .home-content h1 {
+            font-size: 80px;
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+            margin-bottom: 10px;
+        }
+
+        .home-content p.slogan {
+            font-size: 24px;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+
+        .highlight-box {
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(5px);
+        }
+
+        .ip-box {
+            background: #222;
+            padding: 15px 30px;
+            border-radius: 5px;
+            border: 2px dashed var(--primary);
+            display: inline-block;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .ip-box:hover {
+            background: #333;
+            transform: scale(1.05);
+        }
+
+        .status-online {
+            color: var(--success);
+            font-weight: bold;
+            margin-top: 20px;
+            display: block;
+            font-size: 1.2rem;
+        }
+
+        /* SEÇÕES GERAIS */
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2.section-title {
+            text-align: center;
+            font-size: 45px;
+            margin-bottom: 50px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* EQUIPE */
+        .staff-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            transition: 0.3s;
+        }
+
+        .staff-card:hover { transform: translateY(-10px); }
+
+        .staff-role { font-weight: bold; color: var(--accent); display: block; margin-bottom: 10px; }
+        .staff-name { font-size: 20px; }
+
+        /* VIPS */
+        .vip-category {
+            margin-bottom: 80px;
+        }
+
+        .vip-category h3 {
+            font-size: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #333;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+
+        .card.featured {
+            border: 2px solid var(--gold);
+        }
+
+        .price-tag {
+            font-size: 28px;
+            color: var(--success);
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .benefit-list {
+            list-style: none;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            font-size: 14px;
+        }
+
+        .benefit-list li::before {
+            content: "✔";
+            color: var(--success);
+            margin-right: 8px;
+        }
+
+        .buy-btn {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .buy-btn:hover {
+            background: var(--accent);
+        }
+
+        /* TAGS */
+        .tag-item {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .tag-display {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background: #000;
+        }
+
+        /* LOJA */
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        /* DISCORD */
+        #discord {
+            text-align: center;
+            background: linear-gradient(45deg, #151515, #2c0052);
+            border-radius: 20px;
+            margin-bottom: 100px;
+            padding: 60px 20px;
+        }
+
+        .discord-btn {
+            display: inline-block;
+            background: #5865F2;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 22px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 30px;
+            transition: 0.3s;
+        }
+
+        .discord-btn:hover {
+            background: #4752c4;
+            transform: scale(1.1);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #000;
+            padding: 50px 20px;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        .footer-info h4 { color: var(--primary); font-size: 24px; margin-bottom: 10px; }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .home-content h1 { font-size: 50px; }
+            .grid-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo">Fúria MC</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#vips">VIPs</a></li>
+                <li><a href="#tags">Tags</a></li>
+                <li><a href="#loja">Loja</a></li>
+                <li><a href="#discord">Discord</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home">
+        <div class="home-content">
+            <h1>FÚRIA MC</h1>
+            <p class="slogan">“Onde a fúria se torna lenda!”</p>
+            
+            <div class="highlight-box">
+                <p>Temos vários modos de jogo como <strong>Survival, Semi-Anarquia, SkyWars, OneBlock</strong> e muito mais…<br>
+                Também contamos com um servidor exclusivo apenas para gravações.</p>
+            </div>
+
+            <div class="ip-box" onclick="copyIP()">
+                <span>IP: 198.89.99.163:25566</span>
+                <p style="font-size: 12px; margin-top: 5px;">(Clique para copiar)</p>
+            </div>
+
+            <span class="status-online">● STATUS: ONLINE (2026)</span>
+        </div>
+    </section>
+
+    <section id="equipe">
+        <h2 class="section-title">Nossa Equipe</h2>
+        <div class="grid-container">
+            <div class="staff-card">
+                <span class="staff-role">Fundador</span>
+                <div class="staff-name">hell_gojo</div>
+            </div>
+            <div class="staff-card">
+                <span class="staff-role">Dono Principal</span>
+                <div class="staff-name">KalebBR</div>
+            </div>
+            <div class="staff-card">
+                <span class="staff-role">Dono Secundário</span>
+                <div class="staff-name">fufuite</div>
+            </div>
+            <div class="staff-card">
+                <span class="staff-role">Administrador</span>
+                <div class="staff-name">ArthurRoma</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="vips">
+        <h2 class="section-title">Planos VIP - Preços Imbatíveis</h2>
+        <p style="text-align: center; margin-top: -40px; margin-bottom: 50px; color: var(--success); font-weight: bold;">
+            Aproveite a promoção de 2026! Todos os kits são exclusivos para VIPs.
+        </p>
+
+        <div class="vip-category">
+            <h3>💎 VIPs Permanentes (Melhor Custo-Benefício)</h3>
+            <div class="grid-container">
+                <div class="card featured">
+                    <h4>VIP+ SUPREMO</h4>
+                    <span class="old-price">R$ 150,00</span>
+                    <div class="price-tag">R$ 49,90</div>
+                    <ul class="benefit-list">
+                        <li>Kit Supremo Diário</li>
+                        <li>Tag [SUPREMO] Colorida</li>
+                        <li>Voo em todos os Lobbys</li>
+                        <li>Acesso ao Servidor de Gravação</li>
+                        <li>Prioridade na fila</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+                <div class="card">
+                    <h4>FÚRIA+ PERMANENTE</h4>
+                    <div class="price-tag">R$ 39,90</div>
+                    <ul class="benefit-list">
+                        <li>Todos os Comandos VIP</li>
+                        <li>Tag [FÚRIA+] Exclusiva</li>
+                        <li>Entrar em salas cheias</li>
+                        <li>Chat Colorido</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+                <div class="card">
+                    <h4>MVP+ PERMANENTE</h4>
+                    <div class="price-tag">R$ 29,90</div>
+                    <ul class="benefit-list">
+                        <li>Kit MVP+ Especial</li>
+                        <li>Partículas exclusivas</li>
+                        <li>Tag [MVP+]</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="vip-category">
+            <h3>📅 VIPs Anuais (12 Meses de Vantagem)</h3>
+            <div class="grid-container">
+                <div class="card">
+                    <h4>LEGEND ANUAL</h4>
+                    <div class="price-tag">R$ 25,00</div>
+                    <ul class="benefit-list">
+                        <li>Multiplicador de XP 3x</li>
+                        <li>Tag [LEGEND]</li>
+                        <li>Kit Legend Semanal</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+                <div class="card">
+                    <h4>MVP ANUAL</h4>
+                    <div class="price-tag">R$ 15,00</div>
+                    <ul class="benefit-list">
+                        <li>Kit MVP Semanal</li>
+                        <li>Acesso ao /ec portátil</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+                <div class="card">
+                    <h4>FÚRIA ANUAL</h4>
+                    <div class="price-tag">R$ 12,00</div>
+                    <ul class="benefit-list">
+                        <li>Kit Fúria Semanal</li>
+                        <li>/fix em itens</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="vip-category">
+            <h3>🗓️ VIPs Trimestrais (3 Meses)</h3>
+            <div class="grid-container">
+                <div class="card">
+                    <h4>ELITE TRIMESTRAL</h4>
+                    <div class="price-tag">R$ 9,90</div>
+                    <ul class="benefit-list">
+                        <li>Tag [ELITE]</li>
+                        <li>Kit Elite</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+                <div class="card">
+                    <h4>VIP+ TRIMESTRAL</h4>
+                    <div class="price-tag">R$ 7,50</div>
+                    <ul class="benefit-list">
+                        <li>Vantagens VIP+ clássicas</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+                <div class="card">
+                    <h4>GUERREIRO</h4>
+                    <div class="price-tag">R$ 5,00</div>
+                    <ul class="benefit-list">
+                        <li>Tag [GUERREIRO]</li>
+                        <li>Kit Combate</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="vip-category">
+            <h3>🌙 VIPs Mensais (Preço de Coxinha!)</h3>
+            <div class="grid-container">
+                <div class="card">
+                    <h4>VIP MENSAL</h4>
+                    <div class="price-tag">R$ 3,00</div>
+                    <ul class="benefit-list">
+                        <li>Tag [VIP]</li>
+                        <li>Kit Básico</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+                <div class="card">
+                    <h4>MEMBER+</h4>
+                    <div class="price-tag">R$ 2,00</div>
+                    <ul class="benefit-list">
+                        <li>Prefixo especial</li>
+                        <li>Cores no chat</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+                <div class="card">
+                    <h4>INICIANTE</h4>
+                    <div class="price-tag">R$ 1,00</div>
+                    <ul class="benefit-list">
+                        <li>Apoie o servidor</li>
+                    </ul>
+                    <a href="#discord" class="buy-btn">COMPRAR AGORA</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tags">
+        <h2 class="section-title">🏷️ Central de Tags Customizadas</h2>
+        <p style="text-align: center; margin-bottom: 30px; font-weight: bold; color: var(--accent);">Qualquer TAG por no máximo R$ 10,00!</p>
+        <div class="grid-container">
+            <div class="tag-item">
+                <div><span class="tag-display" style="color: #ff0000;">[PERIGOSO]</span></div>
+                <div class="price-tag" style="font-size: 18px; margin:0;">R$ 5,00</div>
+            </div>
+            <div class="tag-item">
+                <div><span class="tag-display" style="color: #00eeff;">[RICO]</span></div>
+                <div class="price-tag" style="font-size: 18px; margin:0;">R$ 10,00</div>
+            </div>
+            <div class="tag-item">
+                <div><span class="tag-display" style="color: #ffff00;">[BRABO]</span></div>
+                <div class="price-tag" style="font-size: 18px; margin:0;">R$ 4,00</div>
+            </div>
+            <div class="tag-item">
+                <div><span class="tag-display" style="color: #ff00ff;">[MAGNATA]</span></div>
+                <div class="price-tag" style="font-size: 18px; margin:0;">R$ 8,00</div>
+            </div>
+            <div class="tag-item">
+                <div><span class="tag-display" style="color: #00ff00;">[VENENO]</span></div>
+                <div class="price-tag" style="font-size: 18px; margin:0;">R$ 3,00</div>
+            </div>
+            <div class="tag-item">
+                <div><span class="tag-display" style="color: #ffffff; border: 1px solid #fff;">[LENDÁRIO]</span></div>
+                <div class="price-tag" style="font-size: 18px; margin:0;">R$ 10,00</div>
+            </div>
+            <div class="tag-item">
+                <div><span class="tag-display" style="color: #ffa500;">[REI]</span></div>
+                <div class="price-tag" style="font-size: 18px; margin:0;">R$ 7,00</div>
+            </div>
+            <div class="tag-item">
+                <div><span class="tag-display" style="color: #555;">[SOMBRA]</span></div>
+                <div class="price-tag" style="font-size: 18px; margin:0;">R$ 4,50</div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="#discord" class="buy-btn" style="padding: 15px 50px;">VER TODAS AS 50+ TAGS NO DISCORD</a>
+        </div>
+    </section>
+
+    <section id="loja">
+        <h2 class="section-title">🛒 Loja de Utilidades</h2>
+        <div class="store-grid">
+            <div class="card" style="border: 2px solid #ff4444;">
+                <h4 style="color: #ff4444;">UNBAN GLOBAL</h4>
+                <p>Foi banido? Volte a jogar agora mesmo!</p>
+                <div class="price-tag">R$ 10,00</div>
+                <a href="#discord" class="buy-btn">COMPRAR UNBAN</a>
+            </div>
+
+            <div class="card">
+                <h4>1 MILHÃO DE COINS</h4>
+                <p>Fique rico instantaneamente no Survival.</p>
+                <div class="price-tag">R$ 15,00</div>
+                <a href="#discord" class="buy-btn">COMPRAR COINS</a>
+            </div>
+
+            <div class="card">
+                <h4>PICARETA DE DEUS</h4>
+                <p>Eficiência X, Fortuna V, Inquebrável X.</p>
+                <div class="price-tag">R$ 8,00</div>
+                <a href="#discord" class="buy-btn">COMPRAR ITEM</a>
+            </div>
+
+            <div class="card">
+                <h4>BOOSTER DE XP (2H)</h4>
+                <p>Dobre sua experiência por 2 horas.</p>
+                <div class="price-tag">R$ 2,50</div>
+                <a href="#discord" class="buy-btn">COMPRAR BOOST</a>
+            </div>
+
+            <div class="card">
+                <h4>CAIXA MISTERIOSA (x5)</h4>
+                <p>Chances de ganhar itens raríssimos.</p>
+                <div class="price-tag">R$ 5,00</div>
+                <a href="#discord" class="buy-btn">COMPRAR CHAVES</a>
+            </div>
+
+            <div class="card">
+                <h4>SPAWNER DE CREEPER</h4>
+                <p>Melhore sua farm de pólvora.</p>
+                <div class="price-tag">R$ 12,00</div>
+                <a href="#discord" class="buy-btn">COMPRAR SPAWNER</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="discord">
+        <h2>FALE CONOSCO NO DISCORD</h2>
+        <div style="max-width: 600px; margin: 0 auto;">
+            <p style="font-size: 20px; margin-bottom: 20px;">
+                "Para mais informações, entre em contato com o <strong>hell_gojo</strong>"
+            </p>
+            <p>Compre VIPs, tags e muito mais no nosso Discord na aba de produtos.</p>
+            <a href="https://discord.gg/ywv6h3Mwvy" target="_blank" class="discord-btn">ENTRAR NO DISCORD</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-info">
+            <h4>FÚRIA MC</h4>
+            <p>&copy; 2026 - Todos os direitos reservados.</p>
+            <p style="font-size: 12px; color: #555; margin-top: 20px;">Não somos afiliados à Mojang AB.</p>
+        </div>
+    </footer>
+
+    <script>
+        function copyIP() {
+            const ip = "198.89.99.163:25566";
+            navigator.clipboard.writeText(ip).then(() => {
+                alert("IP Copiado: " + ip + "\nAgora é só colar no seu Minecraft!");
+            });
+        }
+    </script>
+</body>
+</html>
